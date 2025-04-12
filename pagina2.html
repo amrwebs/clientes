@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Clientes Guardados</title>
+  <link rel="stylesheet" href="estilos.css" />
+</head>
+<body>
+
+  <header class="header">
+    <div class="logo-container">
+      <img src="logo.png" alt="Logo" class="logo" />
+      <h1>Clientes Registrados</h1>
+    </div>
+    <a href="pagina1.html" class="btn-volver">Volver a formulario</a>
+  </header>
+
+  <div id="clientes-container" style="display: flex; flex-wrap: wrap; gap: 20px;"></div>
+
+  <script>
+    const container = document.getElementById("clientes-container");
+
+    function cargarClientes() {
+      container.innerHTML = "";
+      const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+      clientes.forEach((cliente, index) => {
+        const card = document.createElement("div");
+        card.className = "product-card";
+        card.style.flex = "1 1 200px";
+        card.innerHTML = `
+          <div class="product-info">
+            <h2>${cliente.nombre} #${index + 1}</h2>
+            <p><strong>Nombre y Apellido:</strong> ${cliente.nombre}</p>
+            <p><strong>Domicilio:</strong> ${cliente.domicilio}</p>
+            <p><strong>Localidad:</strong> ${cliente.localidad}</p>
+            <p><strong>Código Postal:</strong> ${cliente.codigoPostal}</p>
+            <p><strong>Teléfono:</strong> ${cliente.telefono}</p>
+            <p><strong>Email:</strong> ${cliente.email}</p>
+            <button onclick="eliminarCliente(${index})">Eliminar</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function eliminarCliente(index) {
+      let clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+      clientes.splice(index, 1);
+      localStorage.setItem("clientes", JSON.stringify(clientes));
+      cargarClientes();
+    }
+
+    cargarClientes();
+  </script>
+
+</body>
+</html>
