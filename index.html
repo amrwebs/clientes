@@ -14,7 +14,6 @@
     <div class="logo-container">
       <img src="./img/logo ar web.png" alt="Logo Indumentaria AR" class="logo">
       <h1>Indumentaria</h1>
-
     </div>
   </header>
 
@@ -53,27 +52,28 @@
     <button type="submit" id="btn-confirmar" style="width: 100%; padding: 12px; background: #4caf50; color: white; border: none; font-size: 1.2rem; border-radius: 10px; cursor: pointer;">Confirmar compra</button>
   </form>
 
+  <!-- Script corregido -->
   <script>
     document.getElementById("form-compra").addEventListener("submit", function (e) {
       e.preventDefault();
 
-      // Captura y guarda los datos en localStorage
       const datos = {
-        nombre: this.nombre.value,
-        email: this.email.value,
-        direccion: this.direccion.value,
-        localidad: this.localidad.value,
-        codigoPostal: this.codigoPostal.value,
-        telefono: this.telefono.value,
-        talle: this.talle.value
+        nombre: document.querySelector('[name="nombre"]').value,
+        email: document.querySelector('[name="email"]').value,
+        direccion: document.querySelector('[name="direccion"]').value,
+        localidad: document.querySelector('[name="localidad"]').value,
+        codigoPostal: document.querySelector('[name="codigoPostal"]').value,
+        telefono: document.querySelector('[name="telefono"]').value,
+        talle: document.querySelector('[name="talle"]').value
       };
 
       const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
       clientes.push(datos);
       localStorage.setItem("clientes", JSON.stringify(clientes));
 
-      // Redirecciona automáticamente a Mercado Pago
-      window.location.href = "https://mpago.la/1SvcrA8";
+      setTimeout(() => {
+        window.location.href = "https://mpago.la/1SvcrA8";
+      }, 500);
     });
   </script>
 
@@ -97,7 +97,7 @@
 
     @media (min-width: 1024px) {
       #secreto-btn:hover {
-        opacity: 0.3; /* Apenas visible si pasás el mouse encima */
+        opacity: 0.3;
       }
     }
 
