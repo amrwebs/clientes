@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Clientes Guardados</title>
+  <title>Clientes Registrados</title>
   <link rel="stylesheet" href="estilos.css" />
 </head>
 <body>
 
   <header class="header">
     <div class="logo-container">
-      <img src="logo.png" alt="Logo" class="logo" />
+      <img src="img/logo.png" alt="Logo" class="logo" />
       <h1>Clientes Registrados</h1>
     </div>
     <a href="pagina1.html" class="btn-volver">Volver a formulario</a>
@@ -31,9 +31,9 @@
         card.style.flex = "1 1 200px";
         card.innerHTML = `
           <div class="product-info">
-            <h2>${cliente.nombre} #${index + 1}</h2>
+            <h2>Cliente #${index + 1}</h2>
             <p><strong>Nombre y Apellido:</strong> ${cliente.nombre}</p>
-            <p><strong>Domicilio:</strong> ${cliente.domicilio}</p>
+            <p><strong>Domicilio:</strong> ${cliente.direccion}</p>
             <p><strong>Localidad:</strong> ${cliente.localidad}</p>
             <p><strong>Código Postal:</strong> ${cliente.codigoPostal}</p>
             <p><strong>Teléfono:</strong> ${cliente.telefono}</p>
@@ -54,6 +54,14 @@
 
     cargarClientes();
   </script>
+
+<script>
+  const clave = prompt("Ingrese la contraseña para acceder:");
+  if (clave !== "tusecretito123") {
+    alert("Contraseña incorrecta. Redirigiendo...");
+    window.location.href = "https://amrwebs.github.io/"; // Página principal u otra
+  }
+</script>
 
 </body>
 </html>
