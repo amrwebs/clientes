@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Confirmar Compra</title>
+  <title>Indumentaria AR - Confirmar Compra</title>
   <link rel="stylesheet" href="estilos.css" />
   <link rel="icon" type="image/x-icon" href="img/logoarpag.ico">
 </head>
@@ -12,8 +12,9 @@
   <!-- Encabezado -->
   <header class="header">
     <div class="logo-container">
+      <img src="./img/logo ar web.png" alt="Logo Indumentaria AR" class="logo">
       <h1>Indumentaria</h1>
-      <img src="img/logo ar web.png" alt="Logo Indumentaria AR" class="logo">
+
     </div>
   </header>
 
@@ -39,6 +40,16 @@
     <label style="color: #fff;">Teléfono:</label>
     <input type="text" name="telefono" required placeholder="Ej: 123456789" style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px;">
 
+    <label style="color: #fff;">Talle:</label>
+    <select name="talle" required style="width: 100%; padding: 10px; margin: 10px 0; border-radius: 8px;">
+      <option value="" disabled selected>Selecciona un talle</option>
+      <option value="S">S</option>
+      <option value="M">M</option>
+      <option value="L">L</option>
+      <option value="XL">XL</option>
+      <option value="XXL">XXL</option>
+    </select>
+
     <button type="submit" id="btn-confirmar" style="width: 100%; padding: 12px; background: #4caf50; color: white; border: none; font-size: 1.2rem; border-radius: 10px; cursor: pointer;">Confirmar compra</button>
   </form>
 
@@ -53,7 +64,8 @@
         direccion: this.direccion.value,
         localidad: this.localidad.value,
         codigoPostal: this.codigoPostal.value,
-        telefono: this.telefono.value
+        telefono: this.telefono.value,
+        talle: this.talle.value
       };
 
       const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
@@ -65,33 +77,36 @@
     });
   </script>
 
-<!-- Botón secreto solo visible en PC -->
-<a href="./pagina2.html" id="secreto-btn">.</a>
+  <!-- Botón secreto solo visible en PC -->
+  <a href="./pagina2.html" id="secreto-btn">🧠</a>
 
-<style>
-  #secreto-btn {
-    position: fixed;
-    bottom: 10px;
-    right: 10px;
-    width: 10px;
-    height: 10px;
-    opacity: 0;
-    z-index: 999;
-    transition: opacity 0.3s;
-  }
-
-  @media (min-width: 1024px) {
-    #secreto-btn:hover {
-      opacity: 0.2; /* Apenas visible si pasás el mouse encima */
-    }
-  }
-
-  @media (max-width: 1023px) {
+  <style>
     #secreto-btn {
-      display: none;
+      position: fixed;
+      bottom: 10px;
+      right: 10px;
+      width: 20px;
+      height: 20px;
+      font-size: 12px;
+      opacity: 0;
+      z-index: 999;
+      transition: opacity 0.3s;
+      color: #fff;
+      text-decoration: none;
     }
-  }
-</style>
+
+    @media (min-width: 1024px) {
+      #secreto-btn:hover {
+        opacity: 0.3; /* Apenas visible si pasás el mouse encima */
+      }
+    }
+
+    @media (max-width: 1023px) {
+      #secreto-btn {
+        display: none;
+      }
+    }
+  </style>
 
 </body>
 </html>
