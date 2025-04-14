@@ -1,15 +1,13 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Tareas en Tiempo Real</title>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Lista de Tareas</title>
   <style>
     body {
       font-family: Arial, sans-serif;
       background: #f4f4f4;
-      color: #333;
-      margin: 0;
       padding: 20px;
       text-align: center;
     }
@@ -18,46 +16,33 @@
       color: #2c3e50;
     }
 
-    .task-input {
-      margin: 20px 0;
-    }
-
     input[type="text"] {
       padding: 10px;
       width: 60%;
       max-width: 300px;
-      border: 1px solid #ccc;
       border-radius: 5px;
+      border: 1px solid #ccc;
     }
 
     button {
       padding: 6px 12px;
-      margin: 0 5px;
-      background-color: #3498db;
-      color: white;
+      margin: 5px;
       border: none;
       border-radius: 5px;
+      color: white;
       cursor: pointer;
     }
 
-    button:hover {
-      background-color: #2980b9;
+    .agregar {
+      background-color: #3498db;
+    }
+
+    .terminar {
+      background-color: #2ecc71;
     }
 
     .eliminar {
       background-color: #e74c3c;
-    }
-
-    .eliminar:hover {
-      background-color: #c0392b;
-    }
-
-    .terminada {
-      background-color: #2ecc71;
-    }
-
-    .terminada:hover {
-      background-color: #27ae60;
     }
 
     ul {
@@ -71,40 +56,32 @@
       padding: 10px;
       border-radius: 5px;
       max-width: 400px;
-      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       display: flex;
       justify-content: space-between;
       align-items: center;
+    }
+
+    .texto {
+      flex: 1;
+      text-align: left;
     }
 
     .seccion {
       margin-top: 30px;
     }
 
-    .seccion h2 {
-      color: #34495e;
-    }
-
     .date {
-      margin-top: 40px;
-      font-size: 1.1em;
+      margin-top: 30px;
+      font-size: 1em;
       color: #555;
-    }
-
-    .texto-tarea {
-      flex: 1;
-      text-align: left;
     }
   </style>
 </head>
 <body>
-
   <h1>Lista de Tareas</h1>
-
-  <div class="task-input">
-    <input type="text" id="nuevaTarea" placeholder="Escribe una tarea...">
-    <button onclick="agregarTarea()">Agregar</button>
-  </div>
+  <input type="text" id="nuevaTarea" placeholder="Escribe una tarea..." />
+  <button class="agregar" onclick="agregarTarea()">Agregar</button>
 
   <div class="seccion">
     <h2>Pendientes</h2>
@@ -126,44 +103,43 @@
     }
 
     function renderTareas() {
-      const listaPendientes = document.getElementById('tareasPendientes');
-      const listaTerminadas = document.getElementById('tareasTerminadas');
-      listaPendientes.innerHTML = '';
-      listaTerminadas.innerHTML = '';
+      const pendientes = document.getElementById('tareasPendientes');
+      const terminadas = document.getElementById('tareasTerminadas');
+      pendientes.innerHTML = '';
+      terminadas.innerHTML = '';
 
-      tareas.forEach((tarea, index) => {
+      tareas.forEach((tarea, i) => {
         const li = document.createElement('li');
-
-        const span = document.createElement('span');
-        span.className = 'texto-tarea';
-        span.textContent = tarea.texto;
+        const texto = document.createElement('span');
+        texto.className = 'texto';
+        texto.textContent = tarea.texto;
 
         const btnFinalizar = document.createElement('button');
+        btnFinalizar.className = 'terminar';
         btnFinalizar.textContent = tarea.finalizada ? '↩️ Restaurar' : '✅ Finalizar';
-        btnFinalizar.className = 'terminada';
         btnFinalizar.onclick = () => {
-          tareas[index].finalizada = !tarea.finalizada;
+          tareas[i].finalizada = !tarea.finalizada;
           guardarTareas();
           renderTareas();
         };
 
         const btnEliminar = document.createElement('button');
-        btnEliminar.textContent = '🗑️ Eliminar';
         btnEliminar.className = 'eliminar';
+        btnEliminar.textContent = '🗑️';
         btnEliminar.onclick = () => {
-          tareas.splice(index, 1);
+          tareas.splice(i, 1);
           guardarTareas();
           renderTareas();
         };
 
-        li.appendChild(span);
+        li.appendChild(texto);
         li.appendChild(btnFinalizar);
         li.appendChild(btnEliminar);
 
         if (tarea.finalizada) {
-          listaTerminadas.appendChild(li);
+          terminadas.appendChild(li);
         } else {
-          listaPendientes.appendChild(li);
+          pendientes.appendChild(li);
         }
       });
     }
@@ -179,17 +155,23 @@
       }
     }
 
-    function mostrarFechaActual() {
-      const fecha = new Date();
+    function mostrarFecha() {
+      const hoy = new Date();
       const opciones = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
-      const fechaFormateada = fecha.toLocaleDateString('es-ES', opciones);
-      document.getElementById('fechaHoy').textContent = `Hoy es ${fechaFormateada}`;
+      document.getElementById('fechaHoy').textContent = `Hoy es ${hoy.toLocaleDateString('es-ES', opciones)}`;
     }
 
+    // ESCUCHA CAMBIOS DESDE OTRAS PESTAÑAS
+    window.addEventListener('storage', (e) => {
+      if (e.key === 'tareas') {
+        tareas = JSON.parse(e.newValue || '[]');
+        renderTareas();
+      }
+    });
+
     // Inicial
-    mostrarFechaActual();
+    mostrarFecha();
     renderTareas();
   </script>
-
 </body>
 </html>
