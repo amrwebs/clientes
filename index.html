@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>Lista de Tareas</title>
+  <title>Tareas en Tiempo Real</title>
   <style>
     body {
       font-family: Arial, sans-serif;
@@ -108,58 +108,75 @@
 
   <div class="seccion">
     <h2>Pendientes</h2>
-    <ul id="tareasPendientes">
-      <!-- Tareas pendientes acá -->
-    </ul>
+    <ul id="tareasPendientes"></ul>
   </div>
 
   <div class="seccion">
     <h2>Terminadas</h2>
-    <ul id="tareasTerminadas">
-      <!-- Tareas terminadas acá -->
-    </ul>
+    <ul id="tareasTerminadas"></ul>
   </div>
 
   <div class="date" id="fechaHoy"></div>
 
   <script>
+    let tareas = JSON.parse(localStorage.getItem('tareas')) || [];
+
+    function guardarTareas() {
+      localStorage.setItem('tareas', JSON.stringify(tareas));
+    }
+
+    function renderTareas() {
+      const listaPendientes = document.getElementById('tareasPendientes');
+      const listaTerminadas = document.getElementById('tareasTerminadas');
+      listaPendientes.innerHTML = '';
+      listaTerminadas.innerHTML = '';
+
+      tareas.forEach((tarea, index) => {
+        const li = document.createElement('li');
+
+        const span = document.createElement('span');
+        span.className = 'texto-tarea';
+        span.textContent = tarea.texto;
+
+        const btnFinalizar = document.createElement('button');
+        btnFinalizar.textContent = tarea.finalizada ? '↩️ Restaurar' : '✅ Finalizar';
+        btnFinalizar.className = 'terminada';
+        btnFinalizar.onclick = () => {
+          tareas[index].finalizada = !tarea.finalizada;
+          guardarTareas();
+          renderTareas();
+        };
+
+        const btnEliminar = document.createElement('button');
+        btnEliminar.textContent = '🗑️ Eliminar';
+        btnEliminar.className = 'eliminar';
+        btnEliminar.onclick = () => {
+          tareas.splice(index, 1);
+          guardarTareas();
+          renderTareas();
+        };
+
+        li.appendChild(span);
+        li.appendChild(btnFinalizar);
+        li.appendChild(btnEliminar);
+
+        if (tarea.finalizada) {
+          listaTerminadas.appendChild(li);
+        } else {
+          listaPendientes.appendChild(li);
+        }
+      });
+    }
+
     function agregarTarea() {
       const input = document.getElementById('nuevaTarea');
       const texto = input.value.trim();
       if (texto !== '') {
-        crearTareaElemento(texto, false);
+        tareas.push({ texto, finalizada: false });
+        guardarTareas();
+        renderTareas();
         input.value = '';
       }
-    }
-
-    function crearTareaElemento(texto, finalizada) {
-      const li = document.createElement('li');
-      
-      const span = document.createElement('span');
-      span.className = 'texto-tarea';
-      span.textContent = texto;
-
-      const btnFinalizar = document.createElement('button');
-      btnFinalizar.textContent = finalizada ? '↩️ Restaurar' : '✅ Finalizar';
-      btnFinalizar.className = finalizada ? 'terminada' : 'terminada';
-      btnFinalizar.onclick = function () {
-        li.remove();
-        crearTareaElemento(texto, !finalizada);
-      };
-
-      const btnEliminar = document.createElement('button');
-      btnEliminar.textContent = '🗑️ Eliminar';
-      btnEliminar.className = 'eliminar';
-      btnEliminar.onclick = function () {
-        li.remove();
-      };
-
-      li.appendChild(span);
-      li.appendChild(btnFinalizar);
-      li.appendChild(btnEliminar);
-
-      const lista = finalizada ? document.getElementById('tareasTerminadas') : document.getElementById('tareasPendientes');
-      lista.appendChild(li);
     }
 
     function mostrarFechaActual() {
@@ -171,7 +188,7 @@
 
     // Inicial
     mostrarFechaActual();
-    crearTareaElemento('Tarea 1: Terminar el ejemplo ✨', false);
+    renderTareas();
   </script>
 
 </body>
